@@ -116,6 +116,14 @@ void negate( vec3 *vec );
  */
 vec3 *add_vec( const vec3 *vec1, const vec3 *vec2 );
 
+/**
+ * Adds two vectors together without creating a new vector
+ * The sum is stored into the first vector
+ * @param vec1 The first vector to add (stores the sum)
+ * @param vec2 The second vector to add
+ */
+void add_vec_self( vec3 *vec1, const vec3 *vec2 );
+
 /** 
  * Subtracts two vectors
  * @param vec1 The vector being subtracted from (minued)
@@ -123,6 +131,14 @@ vec3 *add_vec( const vec3 *vec1, const vec3 *vec2 );
  * @return A new vector containing the result of the subtraction
  */
 vec3 *subtract_vec( const vec3 *vec1, const vec3 *vec2 );
+
+/**
+ * Adds two vectors together without creating a new vector
+ * The difference is stored into the first vector
+ * @param vec1 The vector being subtracted from (stores the difference)
+ * @param vec2 The vector subtracting
+ */
+void subtract_vec_self( vec3 *vec1, const vec3 *vec2 );
 
 /** 
  * Calculates the dot product of two vectors
@@ -147,6 +163,31 @@ vec3 *cross_product( const vec3 *vec1, const vec3 *vec2 );
  * @return The entrywise product
  */
 vec3 *entrywise_product( const vec3 *vec1, const vec3 *vec2 );
+
+/**
+ * Calculates the entrywise product of two vectors without creating a new vector
+ * The product is stored into the first vector
+ * @param vec1 The first vector of the product (stores the product)
+ * @param vec2 The second vector of the product
+ */
+void entrywise_product_self( vec3 *vec1, const vec3 *vec2 );
+
+/**
+ * Calculates the entrywise division of two vectors
+ * @param vec1 The first vector of the division
+ * @param vec2 The second vector of the division
+ * @return The entrywise quotient
+ */
+vec3 *entrywise_division( const vec3 *vec1, const vec3 *vec2 );
+
+/**
+ * Calculates the entrywise division of two vectors without creating a new
+ * vector
+ * The quotient is stored into the first vector
+ * @param vec1 The first vector of the division (stores the quotient)
+ * @param vec2 The second vector of the division
+ */
+void entrywise_division_self( vec3 *vec1, const vec3 *vec2 );
 
 /**
  * Calculates the length of the vector

@@ -150,6 +150,15 @@ add_vec( const vec3 *vec1, const vec3 *vec2 )
     return vec;
 }
 
+/* Adds two vectors and stores the sum in the first vector */
+void
+subtract_vec_self( vec3 *vec1, const vec3 *vec2 )
+{
+    vec1->e0 += vec2->e0;
+    vec1->e1 += vec2->e1;
+    vec1->e2 += vec2->e2;
+}
+
 /* Subtracts two vectors */
 vec3 *
 subtract_vec( const vec3 *vec1, const vec3 *vec2 )
@@ -163,12 +172,20 @@ subtract_vec( const vec3 *vec1, const vec3 *vec2 )
     return vec;
 }
 
+/* Subtracts two vectors and stores the difference in the first vector */
+void
+subtract_vec_self( vec3 *vec1, const vec3 *vec2 )
+{
+    vec1->e0 -= vec2->e0;
+    vec1->e1 -= vec2->e1;
+    vec1->e2 -= vec2->e2;
+}
+
 /* Calculates the dot product of two vectors */
 float 
 dot_product( const vec3 *vec1, const vec3 *vec2 )
 {
-    return ( vec1->e0 * vec2->e0 ) + ( vec1->e1 * vec2->e1 ) + 
-           ( vec1->e2 * vec2->e2 );
+    return vec1->e0 * vec2->e0 + vec1->e1 * vec2->e1 + vec1->e2 * vec2->e2;
 }
 
 /* Calculates the cross product of two vectors */
@@ -195,6 +212,37 @@ entrywise_product( const vec3 *vec1, const vec3 *vec2 )
     vec->e2 = vec1->e2 * vec2->e2;
 
     return vec;
+}
+
+/* Calculates the entrywise product and stores into the first vector */
+void
+entrywise_product_self( vec3 *vec1, const vec3 *vec2 )
+{
+    vec1->e0 *= vec2->e0;
+    vec1->e1 *= vec2->e1;
+    vec1->e2 *= vec2->e2;
+}
+
+/* Calculates the entrywise division of two vectors */
+vec3 *
+entrywise_division( const vec3 *vec1, const vec3 *vec2 )
+{
+    vec3 *vec = malloc( sizeof( *vec ) );
+
+    vec->e0 = vec1->e0 / vec2->e0;
+    vec->e1 = vec2->e1 / vec2->e1;
+    vec->e2 = vec2->e2 / vec2->e2;
+
+    return vec;
+}
+
+/* Calculates the entrywise division and stores into the first vector */
+void
+entrywise_division_self( vec3 *vec1, const vec3 *vec2 )
+{
+    vec1->e0 /= vec2->e0;
+    vec1->e1 /= vec2->e1;
+    vec1->e2 /= vec2->e2;
 }
 
 /* Calculates the length of the vector */
