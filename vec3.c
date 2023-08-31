@@ -152,7 +152,7 @@ add_vec( const vec3 *vec1, const vec3 *vec2 )
 
 /* Adds two vectors and stores the sum in the first vector */
 void
-subtract_vec_self( vec3 *vec1, const vec3 *vec2 )
+add_vec_self( vec3 *vec1, const vec3 *vec2 )
 {
     vec1->e0 += vec2->e0;
     vec1->e1 += vec2->e1;
