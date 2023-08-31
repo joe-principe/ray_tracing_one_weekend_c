@@ -8,7 +8,7 @@
 vec3 *
 create_vector( float f1, float f2, float f3 )
 {
-    vec3 *vec = ( vec3 * )malloc( sizeof( vec3 ) );
+    vec3 *vec = malloc( sizeof( *vec ) );
 
     vec->e0 = f1;
     vec->e1 = f2;
@@ -21,7 +21,7 @@ create_vector( float f1, float f2, float f3 )
 vec3 *
 empty_vector( void )
 {
-    vec3 *vec = ( vec3 * )malloc( sizeof( vec3 ) );
+    vec3 *vec = malloc( sizeof( *vec ) );
 
     vec->e0 = 0;
     vec->e1 = 0;
@@ -34,7 +34,7 @@ empty_vector( void )
 vec3 *
 copy_vector( vec3 *vec )
 {
-    vec3 *dupe = ( vec3 * )malloc( sizeof( vec3 ) );
+    vec3 *dupe = malloc( sizeof( *dupe ) );
 
     dupe->e0 = vec->e0;
     dupe->e1 = vec->e1;
@@ -141,7 +141,7 @@ negate( vec3 *vec )
 vec3 *
 add_vec( const vec3 *vec1, const vec3 *vec2 )
 {
-    vec3 *vec = ( vec3 * )malloc( sizeof( vec3 ) );
+    vec3 *vec = malloc( sizeof( *vec ) );
 
     vec->e0 = vec1->e0 + vec2->e0;
     vec->e1 = vec1->e1 + vec2->e1;
@@ -154,7 +154,7 @@ add_vec( const vec3 *vec1, const vec3 *vec2 )
 vec3 *
 subtract_vec( const vec3 *vec1, const vec3 *vec2 )
 {
-    vec3 *vec = ( vec3 * )malloc( sizeof( vec3 ) );
+    vec3 *vec = malloc( sizeof( *vec ) );
 
     vec->e0 = vec1->e0 - vec2->e0;
     vec->e1 = vec1->e1 - vec2->e1;
@@ -175,7 +175,7 @@ dot_product( const vec3 *vec1, const vec3 *vec2 )
 vec3 *
 cross_product( const vec3 *vec1, const vec3 *vec2 )
 {
-    vec3 *vec = ( vec3 * )malloc( sizeof( vec3 ) );
+    vec3 *vec = malloc( sizeof( *vec ) );
 
     vec->e0 =    vec1->e1 * vec2->e2 - vec2->e1 * vec1->e2;
     vec->e1 = -( vec1->e0 * vec2->e2 - vec2->e0 * vec1->e2 );
@@ -188,7 +188,7 @@ cross_product( const vec3 *vec1, const vec3 *vec2 )
 vec3 *
 entrywise_product( const vec3 *vec1, const vec3 *vec2 )
 {
-    vec3 *vec = ( vec3 * )malloc( sizeof( vec3 ) );
+    vec3 *vec = malloc( sizeof( *vec ) );
 
     vec->e0 = vec1->e0 * vec2->e0;
     vec->e1 = vec1->e1 * vec2->e1;
@@ -215,7 +215,7 @@ squared_length( const vec3 *vec )
 vec3 *
 unit_vector( const vec3 *vec )
 {
-    vec3 *unit = ( vec3 * )malloc( sizeof( vec3 ) );
+    vec3 *unit = malloc( sizeof( *unit ) );
     float l = length( vec );
 
     unit->e0 = vec->e0 / l;
