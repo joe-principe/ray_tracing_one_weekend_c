@@ -1,0 +1,8 @@
+# Ignore .ppm files
+*.ppm
+
+# Ignore 'bin' directory
+bin/
+
+# Ignore 'renders' directory
+renders/
