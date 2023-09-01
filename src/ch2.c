@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "vec3.h"
+#include "../include/vec3.h"
 
 int
 main( void )
@@ -18,7 +18,7 @@ main( void )
     output_file = fopen( filename, "w" );
 
     if ( !output_file ) {
-        perror( "Could not open hello_world.ppm. Aborting.\n" );
+        perror( "Could not open ch2.ppm. Aborting.\n" );
         exit( EXIT_FAILURE );
     } /* if */
 

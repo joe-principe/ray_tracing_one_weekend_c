@@ -202,7 +202,7 @@ float length( const vec3 *vec );
 float squared_length( const vec3 *vec );
 
 /**
- * Creates a unit vector from a given vector
+ * Creates a new unit vector from a given vector
  * @param vec The original vector
  */
 vec3 *unit_vector( const vec3 *vec );

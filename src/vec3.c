@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "vec3.h"
+#include "../include/vec3.h"
 
 /* Creates a new vector */
 vec3 *
