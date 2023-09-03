@@ -4,12 +4,12 @@
 
 /* Creates an empty ray */
 ray *
-empty_ray( void )
+create_empty_ray( void )
 {
     ray *r = malloc( sizeof( *r ) );
 
-    r->A = empty_vector();
-    r->B = empty_vector();
+    r->A = create_empty_vector();
+    r->B = create_empty_vector();
 
     return r;
 }
@@ -55,9 +55,9 @@ point_at_parameter( const ray *r, float f )
 {
     vec3 *vec = malloc( sizeof( vec3 * ) );
 
-    vec->e0 = r->A->e0 + f * r->B->e0;
-    vec->e1 = r->A->e1 + f * r->B->e1;
-    vec->e2 = r->A->e2 + f * r->B->e2;
+    vec->e[0] = r->A->e[0] + f * r->B->e[0];
+    vec->e[1] = r->A->e[1] + f * r->B->e[1];
+    vec->e[2] = r->A->e[2] + f * r->B->e[2];
 
     return vec;
 }

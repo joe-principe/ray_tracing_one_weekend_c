@@ -5,14 +5,15 @@
 
 typedef struct ray_t ray;
 
-struct ray_t {
+struct ray_t
+{
     vec3 *A, *B;
 };
 
 /**
  * Creates an empty ray
  */
-ray *empty_ray( void );
+ray *create_empty_ray(void);
 
 /**
  * Creates a ray from two given vectors
@@ -20,30 +21,30 @@ ray *empty_ray( void );
  * @param b The ray direction vector
  * @return The ray from these vectors
  */
-ray *create_ray( vec3 *a, vec3 *b );
+ray *create_ray(vec3 *a, vec3 *b);
 
 /**
  * Deletes a ray
  */
-void delete_ray( ray *r );
+void delete_ray(ray *r);
 
 /**
  * Gets the origin vector of the ray
  * @param r The ray
  */
-vec3 *origin( const ray *r );
+vec3 *origin(const ray *r);
 
 /**
  * Gets the direction vector of the ray
  * @param r The ray
  */
-vec3 *direction( const ray *r );
+vec3 *direction(const ray *r);
 
 /**
  * Points the ray in the direction of the parameter
  * @param f The parameter value
  */
-vec3 *point_at_parameter( const ray *r, float f );
+vec3 *point_at_parameter(const ray *r, float f);
 
 #endif
 /* EOF */
