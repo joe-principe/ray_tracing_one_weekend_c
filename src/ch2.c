@@ -13,7 +13,8 @@ main( void )
     FILE *output_file;
     char *filename = "ch2.ppm";
 
-    vec3 *col = empty_vector();
+    vec3 col;
+    set_elems(&col, 0, 0, 0);
 
     output_file = fopen( filename, "w" );
 
@@ -26,19 +27,18 @@ main( void )
 
     for ( j = ny - 1; j >= 0; j-- ) {
         for ( i = 0; i < nx; i++ ) {
-            col->e0 = ( float )( i ) / ( float )( nx );
-            col->e1 = ( float )( j ) / ( float )( ny );
-            col->e2 = 0.2;
+            col.e[0] = ( float )( i ) / ( float )( nx );
+            col.e[1] = ( float )( j ) / ( float )( ny );
+            col.e[2] = 0.2;
 
-            ir = ( int )( 255.99 * col->e0 );
-            ig = ( int )( 255.99 * col->e1 );
-            ib = ( int )( 255.99 * col->e2 );
+            ir = ( int )( 255.99 * col.e[0] );
+            ig = ( int )( 255.99 * col.e[1] );
+            ib = ( int )( 255.99 * col.e[2] );
 
             fprintf( output_file, "%d %d %d\n", ir, ig, ib );
         } /* for */
     } /* for */
 
-    delete_vector( col );
     fclose( output_file );
     return 0;
 }

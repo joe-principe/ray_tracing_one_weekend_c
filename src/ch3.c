@@ -23,7 +23,7 @@ color( const ray *r )
 
     delete_vector( unit_direction );
 
-    return result;
+    return unit_direction;
 }
 
 int
@@ -41,7 +41,7 @@ main( void )
     vec3 lower_left_corner = { -2.0f, -1.0f, -1.0f };
     vec3 origin = { 0, 0, 0 };
     vec3 scr_coord = { 0, 0, 0 };
-    vec3 *col;
+    vec3 *col = create_empty_vector();
     ray r;
 
     output_file = fopen( filename, "w" );
@@ -57,20 +57,20 @@ main( void )
         for ( i = 0; i < nx; i++ ) {
             u = ( float )i / ( float )nx;
             v = ( float )j / ( float )ny;
-            scr_coord.e0 = lower_left_corner.e0
-                           + u * horizontal.e0 + v * vertical.e0;
-            scr_coord.e1 = lower_left_corner.e1
-                           + u * horizontal.e1 + v * vertical.e1;
-            scr_coord.e2 = lower_left_corner.e2
-                           + u * horizontal.e2 + v * vertical.e2;
+            scr_coord.e[0] = lower_left_corner.e[0]
+                           + u * horizontal.e[0] + v * vertical.e[0];
+            scr_coord.e[1] = lower_left_corner.e[1]
+                           + u * horizontal.e[1] + v * vertical.e[1];
+            scr_coord.e[2] = lower_left_corner.e[2]
+                           + u * horizontal.e[2] + v * vertical.e[2];
 
             r.A = &origin;
             r.B = &scr_coord;
             col = color( &r );
 
-            ir = ( int )( 255.99 * col->e0 );
-            ig = ( int )( 255.99 * col->e1 );
-            ib = ( int )( 255.99 * col->e2 );
+            ir = ( int )( 255.99 * col->e[0] );
+            ig = ( int )( 255.99 * col->e[1] );
+            ib = ( int )( 255.99 * col->e[2] );
 
             fprintf( output_file, "%d %d %d\n", ir, ig, ib );
             delete_vector( col );
