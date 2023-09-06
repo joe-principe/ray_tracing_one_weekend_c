@@ -29,7 +29,7 @@ ray *create_ray(vec3 *a, vec3 *b);
  * @param a The origin vector
  * @param b The direction vector
  */
-void set_ray_vectors(ray *r, const vec3 *a, const vec3* b);
+void set_ray_vectors(ray *r, vec3 *a, vec3* b);
 
 /**
  * Deletes a ray. Should only be used if ray AND its vectors were heap allocated

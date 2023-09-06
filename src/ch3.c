@@ -4,26 +4,26 @@
 #include "../include/ray.h"
 
 /**
- * Linearly interpolates between a soft blue and white color
+ * Sets the color of a pixel at the given vector
  * @param r The ray in which the camera is looking
+ * @param vec The 
  * @return A vector containing the colors at that coordinate
  */
-vec3 *
-color(const ray *r)
+void
+color(const ray *r, vec3 *vec)
 {
-    vec3 *unit_direction = unit_vector(direction(r));
-    vec3 first = { 1.0f, 1.0f, 1.0f };
-    vec3 second = { 0.5f, 0.7f, 1.0f };
-    vec3 *result;
-    float t = 0.5f * (y(unit_direction) + 1.0f);
+    vec3 unit_dir, first, second;
+
+    set_elems(&first, 1.0f, 1.0f, 1.0f);
+    set_elems(&second, 0.5f, 0.7f, 1.0f);
+
+    turn_into_unit_vector(&unit_dir, direction(r));
+
+    float t = 0.5f * (get_y(&unit_dir) + 1.0f);
 
     multiply_scalar(&first, (1.0f - t));
     multiply_scalar(&second, t);
-    result = add_vec(&first, &second);
-
-    delete_vector(unit_direction);
-
-    return unit_direction;
+    add_vec(vec, &first, &second);
 }
 
 int
@@ -34,15 +34,17 @@ main(void)
     int nx = 200;
     int ny = 100;
     float u, v;
+    float x, y, z;
     FILE *output_file;
     char *filename = "ch3.ppm";
-    vec3 horizontal = { 4.0f, 0, 0 };
-    vec3 vertical = { 0, 2.0f, 0 };
-    vec3 lower_left_corner = { -2.0f, -1.0f, -1.0f };
-    vec3 origin = { 0, 0, 0 };
-    vec3 scr_coord = { 0, 0, 0 };
-    vec3 *col = create_empty_vector();
+    vec3 lower_left_corner, horizontal, vertical, origin;
+    vec3 scr_coord, pixel_color;
     ray r;
+
+    set_elems(&lower_left_corner, -2.0f, -1.0f, -1.0f);
+    set_elems(&horizontal, 4.0f, 0, 0);
+    set_elems(&vertical, 0, 2.0f, 0);
+    zero_out_vector(&origin);
 
     output_file = fopen(filename, "w");
 
@@ -57,23 +59,23 @@ main(void)
         for (i = 0; i < nx; i++) {
             u = (float)i / (float)nx;
             v = (float)j / (float)ny;
-            scr_coord.e[0] = lower_left_corner.e[0]
-                           + u * horizontal.e[0] + v * vertical.e[0];
-            scr_coord.e[1] = lower_left_corner.e[1]
-                           + u * horizontal.e[1] + v * vertical.e[1];
-            scr_coord.e[2] = lower_left_corner.e[2]
-                           + u * horizontal.e[2] + v * vertical.e[2];
+            x = get_x(&lower_left_corner) + u * get_x(&horizontal)
+                + v * get_x(&vertical);
+            y = get_y(&lower_left_corner) + u * get_y(&horizontal)
+                + v * get_z(&vertical);
+            z = get_z(&lower_left_corner) + u * get_z(&horizontal)
+                + v * get_z(&vertical);
 
-            r.A = &origin;
-            r.B = &scr_coord;
-            col = color(&r);
+            set_elems(&scr_coord, x, y, z);
 
-            ir = (int)(255.99 * col->e[0]);
-            ig = (int)(255.99 * col->e[1]);
-            ib = (int)(255.99 * col->e[2]);
+            set_ray_vectors(&r, &origin, &scr_coord);
+            color(&r, &pixel_color);
+
+            ir = (int)(255.99 * pixel_color.e[0]);
+            ig = (int)(255.99 * pixel_color.e[1]);
+            ib = (int)(255.99 * pixel_color.e[2]);
 
             fprintf(output_file, "%d %d %d\n", ir, ig, ib);
-            delete_vector(col);
         } /* for */
     } /* for */
 

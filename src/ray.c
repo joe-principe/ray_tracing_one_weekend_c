@@ -28,7 +28,7 @@ create_ray(vec3 *a, vec3 *b)
 
 /* Sets the vectors of the input ray */
 void
-set_ray_vectors(ray *r, const vec3 *a, const vec3 *b)
+set_ray_vectors(ray *r, vec3 *a, vec3 *b)
 {
     r->A = a;
     r->B = b;
