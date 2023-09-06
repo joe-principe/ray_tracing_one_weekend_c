@@ -6,3 +6,6 @@ bin/
 
 # Ignore 'renders' directory
 renders/
+
+# Ignore '.vscode' directory
+.vscode/

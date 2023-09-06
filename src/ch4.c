@@ -65,7 +65,7 @@ main(void)
     set_elems(&lower_left_corner, -2.0f, -1.0f, -1.0f);
     set_elems(&origin, 0, 0, 0);
     set_elems(&scr_coord, 0, 0, 0);
-    vec3 *col = create_empty_vector();
+    vec3 *col;
     ray r;
 
     output_file = fopen(filename, "w");
