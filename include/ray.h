@@ -12,6 +12,7 @@ struct ray_t
 
 /**
  * Creates an empty ray
+ * @return An empty ray whose vectors are both the zero vector
  */
 ray *create_empty_ray(void);
 
@@ -24,27 +25,46 @@ ray *create_empty_ray(void);
 ray *create_ray(vec3 *a, vec3 *b);
 
 /**
- * Deletes a ray
+ * Points the vectors of the input ray to the parameter vectors 
+ * @param a The origin vector
+ * @param b The direction vector
+ */
+void set_ray_vectors(ray *r, const vec3 *a, const vec3* b);
+
+/**
+ * Deletes a ray. Should only be used if ray AND its vectors were heap allocated
  */
 void delete_ray(ray *r);
 
 /**
  * Gets the origin vector of the ray
  * @param r The ray
+ * @return The origin vector
  */
 vec3 *origin(const ray *r);
 
 /**
  * Gets the direction vector of the ray
  * @param r The ray
+ * @return The direction vector
  */
 vec3 *direction(const ray *r);
 
 /**
- * Points the ray in the direction of the parameter
+ * Points an input vector in the direction of the ray at the parameter 
+ * @param r The ray
  * @param f The parameter value
+ * @param vec The vector to point
  */
-vec3 *point_at_parameter(const ray *r, float f);
+void point_at_parameter(const ray *r, float f, vec3 *vec);
+
+/**
+ * Creates a vector that points in the direction of the parameter
+ * @param r The ray
+ * @param f The parameter value
+ * @return A new vector that points in the direction
+ */
+vec3 *point_at_parameter_new(const ray *r, float f);
 
 #endif
 /* EOF */
