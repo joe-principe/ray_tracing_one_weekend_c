@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <tgmath.h>
 
@@ -17,24 +16,6 @@ create_vector(float f1, float f2, float f3)
     return vec;
 }
 
-vec3 *
-create_vector_from_array(const float *values, size_t len)
-{
-    vec3 *vec = malloc(sizeof(vec3));
-
-    if (len != 3) {
-        perror("Length of values in \"create_vector_from_array\""
-               "must be equal to 3\n");
-        exit(EXIT_FAILURE);
-    } /* if */
-
-    vec->e[0] = values[0];
-    vec->e[1] = values[1];
-    vec->e[2] = values[2];
-
-    return vec;
-}
-
 /* Creates a new zero vector */
 vec3 *
 create_empty_vector(void)
@@ -48,6 +29,31 @@ create_empty_vector(void)
     return vec;
 }
 
+/* Creates a unit vector from a given direction vector */
+vec3 *
+new_unit_vector(const vec3 *vec)
+{
+    vec3 *unit = malloc(sizeof(*unit));
+    float l = length(vec);
+
+    unit->e[0] = vec->e[0] / l;
+    unit->e[1] = vec->e[1] / l;
+    unit->e[2] = vec->e[2] / l;
+
+    return unit;
+}
+
+/* Turns the vector into a unit vector */
+void 
+turn_into_unit_vector(vec3 *first, const vec3 *second)
+{
+    float k = 1.0f / length(second);
+
+    first->e[0] *= k;
+    first->e[1] *= k;
+    first->e[2] *= k;
+}
+
 /* Sets a vector's elements from individual values */
 void
 set_elems(vec3 *vec, float f1, float f2, float f3)
@@ -55,20 +61,6 @@ set_elems(vec3 *vec, float f1, float f2, float f3)
     vec->e[0] = f1;
     vec->e[1] = f2;
     vec->e[2] = f3;
-}
-
-/* Sets a vector's elements from an array of values */
-void
-set_elems_from_array(vec3 *vec, const float *values, size_t len)
-{
-    if (len != 3) {
-        perror("Length of values in \"set_elems_from_array\" must be equal to 3\n");
-        exit(EXIT_FAILURE);
-    } /* if */
-
-    vec->e[0] = values[0];
-    vec->e[1] = values[1];
-    vec->e[2] = values[2];
 }
 
 /* Sets a vector's elements to zero */
@@ -86,44 +78,62 @@ delete_vector(vec3 *vec)
     free(vec);
 }
 
+/* Calculates the length of the vector */
+float 
+length(const vec3 *vec)
+{
+    return sqrtf(vec->e[0] * vec->e[0]
+               + vec->e[1] * vec->e[1]
+               + vec->e[2] * vec->e[2]);
+}
+
+/* Calculates the squared length of the vector */
+float 
+squared_length(const vec3 *vec)
+{
+    return vec->e[0] * vec->e[0]
+         + vec->e[1] * vec->e[1]
+         + vec->e[2] * vec->e[2];
+}
+
 /* Gets the value of the first element in the vector */
 float
-x(const vec3 *vec)
+get_x(const vec3 *vec)
 {
     return vec->e[0];
 }
 
 /* Gets the value of the second element in the vector */
 float
-y(const vec3 *vec)
+get_y(const vec3 *vec)
 {
     return vec->e[1];
 }
 
 /* Gets the value of the third element in the vector */
 float
-z(const vec3 *vec)
+get_z(const vec3 *vec)
 {
     return vec->e[2];
 }
 
 /* Gets the value of the first element in the vector */
 float
-r(const vec3 *vec)
+get_r(const vec3 *vec)
 {
     return vec->e[0];
 }
 
 /* Gets the value of the second element in the vector */
 float
-g(const vec3 *vec)
+get_g(const vec3 *vec)
 {
     return vec->e[1];
 }
 
 /* Gets the value of the third element in the vector */
 float
-b(const vec3 *vec)
+get_b(const vec3 *vec)
 {
     return vec->e[2];
 }
@@ -173,9 +183,18 @@ negate(vec3 *vec)
     vec->e[2] *= -1;
 }
 
+/* Adds two vectors together and stores the sum in the array */
+void
+add_vec(vec3 *sum, const vec3 *first, const vec3 *second)
+{
+    sum->e[0] = first->e[0] + second->e[0];
+    sum->e[1] = first->e[1] + second->e[1];
+    sum->e[2] = first->e[2] + second->e[2];
+}
+
 /* Adds two vectors together */
 vec3 *
-add_vec(const vec3 *first, const vec3 *second)
+add_vec_new(const vec3 *first, const vec3 *second)
 {
     vec3 *vec = malloc(sizeof(*vec));
 
@@ -186,32 +205,18 @@ add_vec(const vec3 *first, const vec3 *second)
     return vec;
 }
 
-/* Adds two vectors together and stores the sum in the array */
+/* Subtracts two vectors and stores the sum in the array */
 void
-add_vec_arr(float *elems, size_t len, const vec3 *first, const vec3 *second)
+subtract_vec(vec3 *diff, const vec3 *first, const vec3 *second)
 {
-    if (len != 3) {
-        perror("Length of values in \"add_vec_arr\" must be equal to 3\n");
-        exit(EXIT_FAILURE);
-    } /* if */
-
-    elems[0] = first->e[0] + second->e[0];
-    elems[1] = first->e[1] + second->e[1];
-    elems[2] = first->e[2] + second->e[2];
-}
-
-/* Adds two vectors and stores the sum in the first vector */
-void
-add_vec_self(vec3 *first, const vec3 *second)
-{
-    first->e[0] += second->e[0];
-    first->e[1] += second->e[1];
-    first->e[2] += second->e[2];
+    diff->e[0] = first->e[0] - second->e[0];
+    diff->e[1] = first->e[1] - second->e[1];
+    diff->e[2] = first->e[2] - second->e[2];
 }
 
 /* Subtracts two vectors */
 vec3 *
-subtract_vec(const vec3 *first, const vec3 *second)
+subtract_vec_new(const vec3 *first, const vec3 *second)
 {
     vec3 *vec = malloc(sizeof(*vec));
 
@@ -220,30 +225,6 @@ subtract_vec(const vec3 *first, const vec3 *second)
     vec->e[2] = first->e[2] - second->e[2];
 
     return vec;
-}
-
-/* Subtracts two vectors and stores the sum in the array */
-void
-subtract_vec_arr(float *elems, size_t len, const vec3 *first,
-                 const vec3 *second)
-{
-    if (len != 3) {
-        perror("Length of values in \"subtract_vec_arr\" must be equal to 3\n");
-        exit(EXIT_FAILURE);
-    } /* if */
-
-    elems[0] = first->e[0] - second->e[0];
-    elems[1] = first->e[1] - second->e[1];
-    elems[2] = first->e[2] - second->e[2];
-}
-
-/* Subtracts two vectors and stores the difference in the first vector */
-void
-subtract_vec_self(vec3 *first, const vec3 *second)
-{
-    first->e[0] -= second->e[0];
-    first->e[1] -= second->e[1];
-    first->e[2] -= second->e[2];
 }
 
 /* Calculates the dot product of two vectors */
@@ -255,9 +236,18 @@ dot_product(const vec3 *first, const vec3 *second)
          + first->e[2] * second->e[2];
 }
 
+/* Calculates the cross product and stores it in an array */
+void
+cross_product(vec3 *prod, const vec3 *first, const vec3 *second)
+{
+    prod->e[0] =   first->e[1] * second->e[2] - first->e[2] * second->e[1];
+    prod->e[1] = -(first->e[0] * second->e[2] - first->e[2] * second->e[0]);
+    prod->e[2] =   first->e[0] * second->e[1] - first->e[1] * second->e[0];
+}
+
 /* Calculates the cross product of two vectors */
 vec3 *
-cross_product(const vec3 *first, const vec3 *second)
+cross_product_new(const vec3 *first, const vec3 *second)
 {
     vec3 *vec = malloc(sizeof(*vec));
 
@@ -268,25 +258,18 @@ cross_product(const vec3 *first, const vec3 *second)
     return vec;
 }
 
-/* Calculates the cross product and stores it in an array */
+/* Calculates the entrywise product and stores it into an array */
 void
-cross_product_arr(float *elems, size_t len, const vec3 *first,
-                  const vec3 *second)
+entrywise_product(vec3 *prod, const vec3 *first, const vec3 *second)
 {
-    if (len != 3) {
-        perror("Length of values in \"cross_product_arr\""
-                "must be equal to 3\n");
-        exit(EXIT_FAILURE);
-    } /* if */
-
-    elems[0] =   first->e[1] * second->e[2] - first->e[2] * second->e[1];
-    elems[1] = -(first->e[0] * second->e[2] - first->e[2] * second->e[0]);
-    elems[2] =   first->e[0] * second->e[1] - first->e[1] * second->e[0];
+    prod->e[0] = first->e[0] * second->e[0];
+    prod->e[1] = first->e[1] * second->e[1];
+    prod->e[2] = first->e[2] * second->e[2];
 }
 
 /* Calculates the entrywise product and stores it in a new vector */
 vec3 *
-entrywise_product(const vec3 *first, const vec3 *second)
+entrywise_product_new(const vec3 *first, const vec3 *second)
 {
     vec3 *vec = malloc(sizeof(*vec));
 
@@ -297,34 +280,18 @@ entrywise_product(const vec3 *first, const vec3 *second)
     return vec;
 }
 
-/* Calculates the entrywise product and stores it into an array */
+/* Calculates the entrywise division and stores the result into an array */
 void
-entrywise_product_arr(float *elems, size_t len, const vec3 *first,
-                      const vec3 *second)
+entrywise_division(vec3 *quotient, const vec3 *first, const vec3 *second)
 {
-    if (len != 3) {
-        perror("Length of values in \"entrywise_product_arr\""
-                "must be equal to 3\n");
-        exit(EXIT_FAILURE);
-    } /* if */
-
-    elems[0] = first->e[0] * second->e[0];
-    elems[1] = first->e[1] * second->e[1];
-    elems[2] = first->e[2] * second->e[2];
-}
-
-/* Calculates the entrywise product and stores into the first vector */
-void
-entrywise_product_self(vec3 *first, const vec3 *second)
-{
-    first->e[0] *= second->e[0];
-    first->e[1] *= second->e[1];
-    first->e[2] *= second->e[2];
+    quotient->e[0] = first->e[0] / second->e[0];
+    quotient->e[1] = first->e[1] / second->e[1];
+    quotient->e[2] = first->e[2] / second->e[2];
 }
 
 /* Calculates the entrywise division and stores the result into a new vector */
 vec3 *
-entrywise_division(const vec3 *first, const vec3 *second)
+entrywise_division_new(const vec3 *first, const vec3 *second)
 {
     vec3 *vec = malloc(sizeof(*vec));
 
@@ -333,119 +300,5 @@ entrywise_division(const vec3 *first, const vec3 *second)
     vec->e[2] = first->e[2] / second->e[2];
 
     return vec;
-}
-
-/* Calculates the entrywise division and stores the result into an array */
-void
-entrywise_division_arr(float *elems, size_t len, const vec3 *first,
-                       const vec3 *second)
-{
-    if (len != 3) {
-        perror("Length of values in \"entrywise_division_arr\""
-                "must be equal to 3\n");
-        exit(EXIT_FAILURE);
-    } /* if */
-
-    elems[0] = first->e[0] / second->e[0];
-    elems[1] = first->e[1] / second->e[1];
-    elems[2] = first->e[2] / second->e[2];
-}
-
-/* Calculates the entrywise division and stores into the first vector */
-void
-entrywise_division_self(vec3 *first, const vec3 *second)
-{
-    first->e[0] /= second->e[0];
-    first->e[1] /= second->e[1];
-    first->e[2] /= second->e[2];
-}
-
-/* Calculates the length of the vector */
-float 
-length(const vec3 *vec)
-{
-    return sqrtf(vec->e[0] * vec->e[0]
-               + vec->e[1] * vec->e[1]
-               + vec->e[2] * vec->e[2]);
-}
-
-/* Calculates the length of a vector as an array */
-float
-length_arr(const float *elems, size_t len)
-{
-    if (len != 3) {
-        perror("Length of values in \"length_arr\""
-                "must be equal to 3\n");
-        exit(EXIT_FAILURE);
-    } /* if */
-
-    return sqrtf(elems[0] * elems[0]
-               + elems[1] * elems[1]
-               + elems[2] * elems[2]);
-}
-
-/* Calculates the squared length of the vector */
-float 
-squared_length(const vec3 *vec)
-{
-    return vec->e[0] * vec->e[0]
-         + vec->e[1] * vec->e[1]
-         + vec->e[2] * vec->e[2];
-}
-
-/* Creates a unit vector from a given vector */
-vec3 *
-unit_vector(const vec3 *vec)
-{
-    vec3 *unit = malloc(sizeof(*unit));
-    float l = length(vec);
-
-    unit->e[0] = vec->e[0] / l;
-    unit->e[1] = vec->e[1] / l;
-    unit->e[2] = vec->e[2] / l;
-
-    return unit;
-}
-
-/* Sets an array to the unit vector from a given vector */
-void
-unit_vector_arr(const vec3 *vec, float *elems, size_t len)
-{
-    float l = length(vec);
-    
-    elems[0] = vec->e[0] / l;
-    elems[1] = vec->e[1] / l;
-    elems[2] = vec->e[2] / l;
-}
-
-/* Turns the vector into a unit vector */
-void 
-make_unit_vector(vec3 *vec)
-{
-    float k = 1.0f / length(vec);
-
-    vec->e[0] *= k;
-    vec->e[1] *= k;
-    vec->e[2] *= k;
-}
-
-/* Prints the values of a vector to stdout */
-void
-print_vector(const vec3 *vec)
-{
-    printf("%.2f %.2f %.2f\n", vec->e[0], vec->e[1], vec->e[2]);
-}
-
-/* Prints the values of an array to stdout */
-void
-print_arr(const float *elems, size_t len)
-{
-    if (len != 3) {
-        perror("Length of values in \"print_arr\""
-                "must be equal to 3\n");
-        exit(EXIT_FAILURE);
-    } /* if */
-
-    printf("%.2f %.2f %.2f\n", elems[0], elems[1], elems[2]);
 }
 /* EOF */
