@@ -71,9 +71,9 @@ main(void)
             set_ray_vectors(&r, &origin, &scr_coord);
             color(&r, &pixel_color);
 
-            ir = (int)(255.99 * pixel_color.e[0]);
-            ig = (int)(255.99 * pixel_color.e[1]);
-            ib = (int)(255.99 * pixel_color.e[2]);
+            ir = (int)(255.99 * get_x(&pixel_color));
+            ig = (int)(255.99 * get_y(&pixel_color));
+            ib = (int)(255.99 * get_z(&pixel_color));
 
             fprintf(output_file, "%d %d %d\n", ir, ig, ib);
         } /* for */

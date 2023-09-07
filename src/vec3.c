@@ -9,9 +9,7 @@ create_vector(float f1, float f2, float f3)
 {
     vec3 *vec = malloc(sizeof(vec3));
 
-    vec->e[0] = f1;
-    vec->e[1] = f2;
-    vec->e[2] = f3;
+    set_elems(vec, f1, f2, f3);
     
     return vec;
 }
@@ -22,9 +20,7 @@ create_empty_vector(void)
 {
     vec3 *vec = malloc(sizeof(vec3));
 
-    vec->e[0] = 0;
-    vec->e[1] = 0;
-    vec->e[2] = 0;
+    zero_out_vector(vec);
     
     return vec;
 }
@@ -36,9 +32,7 @@ new_unit_vector(const vec3 *vec)
     vec3 *unit = malloc(sizeof(*unit));
     float l = length(vec);
 
-    unit->e[0] = vec->e[0] / l;
-    unit->e[1] = vec->e[1] / l;
-    unit->e[2] = vec->e[2] / l;
+    set_elems(unit, get_x(vec) / l, get_y(vec) / l, get_z(vec) / l);
 
     return unit;
 }
@@ -47,11 +41,9 @@ new_unit_vector(const vec3 *vec)
 void 
 turn_into_unit_vector(vec3 *first, const vec3 *second)
 {
-    float k = 1.0f / length(second);
+    float l = 1.0f / length(second);
 
-    first->e[0] *= k;
-    first->e[1] *= k;
-    first->e[2] *= k;
+    set_elems(first, second->e[0] * l, second->e[1] * l, second->e[2] * l);
 }
 
 /* Sets a vector's elements from individual values */
@@ -103,11 +95,25 @@ get_x(const vec3 *vec)
     return vec->e[0];
 }
 
+/* Sets the value of the first element in the vector */
+void
+set_x(vec3 *vec, float f)
+{
+    vec->e[0] = f;
+}
+
 /* Gets the value of the second element in the vector */
 float
 get_y(const vec3 *vec)
 {
     return vec->e[1];
+}
+
+/* Sets the value of the second element in the vector */
+void
+set_y(vec3 *vec, float f)
+{
+    vec->e[1] = f;
 }
 
 /* Gets the value of the third element in the vector */
@@ -117,11 +123,25 @@ get_z(const vec3 *vec)
     return vec->e[2];
 }
 
+/* Sets the value of the third element in the vector */
+void
+set_z(vec3 *vec, float f)
+{
+    vec->e[2] = f;
+}
+
 /* Gets the value of the first element in the vector */
 float
 get_r(const vec3 *vec)
 {
     return vec->e[0];
+}
+
+/* Sets the value of the first element in the vector */
+void
+set_r(vec3 *vec, float f)
+{
+    vec->e[0] = f;
 }
 
 /* Gets the value of the second element in the vector */
@@ -131,11 +151,25 @@ get_g(const vec3 *vec)
     return vec->e[1];
 }
 
+/* Sets the value of the second element in the vector */
+void
+set_g(vec3 *vec, float f)
+{
+    vec->e[1] = f;
+}
+
 /* Gets the value of the third element in the vector */
 float
 get_b(const vec3 *vec)
 {
     return vec->e[2];
+}
+
+/* Sets the value of the third element in the vector */
+void
+set_b(vec3 *vec, float f)
+{
+    vec->e[2] = f;
 }
 
 /* Adds a scalar value to every element of the vector */

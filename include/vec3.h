@@ -79,11 +79,25 @@ float squared_length(const vec3 *vec);
 float get_x(const vec3 *vec);
 
 /**
+ * Sets the value of the first element in the vector 
+ * @param vec The vector
+ * @param f The value to set the first element in the vector
+ */
+void set_x(vec3 *vec, float f);
+
+/**
  * Gets the value of the second element in the vector
  * @param vec The vector
  * @return The value of the second element in the vector
  */
 float get_y(const vec3 *vec);
+
+/**
+ * Sets the value of the second element in the vector 
+ * @param vec The vector
+ * @param f Theh value to set the second element in the vector
+ */
+void set_y(vec3 *vec, float f);
 
 /**
  * Gets the value of the third element in the vector
@@ -93,11 +107,25 @@ float get_y(const vec3 *vec);
 float get_z(const vec3 *vec);
 
 /**
+ * Sets the value of the third element in the vector 
+ * @param vec The vector
+ * @param f The value to set the third element in the vector
+ */
+void set_z(vec3 *vec, float f);
+
+/**
  * Gets the value of the first element in the vector
  * @param vec The vector
  * @return The value of the first element in the vector
  */
 float get_r(const vec3 *vec);
+
+/**
+ * Sets the value of the first element in the vector 
+ * @param vec The vector
+ * @param f The value to set the first element in the vector
+ */
+void set_r(vec3 *vec, float f);
 
 /**
  * Gets the value of the second element in the vector
@@ -107,11 +135,25 @@ float get_r(const vec3 *vec);
 float get_g(const vec3 *vec);
 
 /**
+ * Sets the value of the second element in the vector 
+ * @param vec The vector
+ * @param f The value to set the second element in the vector
+ */
+void set_g(vec3 *vec, float f);
+
+/**
  * Gets the value of the third element in the vector
  * @param vec The vector
  * @return The value of the third element in the vector
  */
 float get_b(const vec3 *vec);
+
+/**
+ * Sets the value of the third element in the vector 
+ * @param vec The vector
+ * @param f The value to set the third element in the vector
+ */
+void set_b(vec3 *vec, float f);
 
 /**
  * Adds a scalar value to every element of the vector
