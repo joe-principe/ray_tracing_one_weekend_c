@@ -6,8 +6,7 @@
 /**
  * Sets the color of a pixel at the given vector
  * @param r The ray in which the camera is looking
- * @param vec The 
- * @return A vector containing the colors at that coordinate
+ * @param vec The color vector
  */
 void
 color(const ray *r, vec3 *vec)
@@ -62,7 +61,7 @@ main(void)
             x = get_x(&lower_left_corner) + u * get_x(&horizontal)
                 + v * get_x(&vertical);
             y = get_y(&lower_left_corner) + u * get_y(&horizontal)
-                + v * get_z(&vertical);
+                + v * get_y(&vertical);
             z = get_z(&lower_left_corner) + u * get_z(&horizontal)
                 + v * get_z(&vertical);
 
