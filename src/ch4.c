@@ -5,17 +5,25 @@
 #include "../include/ray.h"
 #include "../include/vec3.h"
 
-/* Determines whether a ray hits a sphere */
+/**
+ * Detects whether a ray hits the sphere
+ * @param center The center of the circle
+ * @param radius The radius of the circle
+ * @param r The ray
+ * @return Whether or not the ray hits the sphere
+ */
 bool
-hit_sphere(const vec3 *center, float radius, const ray *r)
+hit_sphere(const vec3 *center, float radius, const ray *r )
 {
+    float a, b, c, discriminant;
+    float x, y, z;
     vec3 oc;
-    float a, b, c;
-    float discriminant;
 
-    oc.e[0] = origin(r)->e[0] - center->e[0];
-    oc.e[1] = origin(r)->e[1] - center->e[1];
-    oc.e[2] = origin(r)->e[2] - center->e[2];
+    x = get_x(origin(r)) - get_x(center);
+    y = get_y(origin(r)) - get_y(center);
+    z = get_z(origin(r)) - get_z(center);
+
+    set_elems(&oc, x, y, z);
 
     a = dot_product(direction(r), direction(r));
     b = 2.0f * dot_product(&oc, direction(r));
@@ -25,29 +33,32 @@ hit_sphere(const vec3 *center, float radius, const ray *r)
     return discriminant > 0;
 }
 
-/* Gets the color of a pixel pointed to by a ray */
-vec3 *
-color(const ray *r)
+/**
+ * Sets the color of a pixel at the given vector
+ * @param r The ray in which the camera is looking
+ * @param vec The color vector
+ */
+void
+color(const ray *r, vec3 *vec)
 {
-    vec3 *pixel_color = create_empty_vector();
-    vec3 *unit_direction;
-    vec3 *red = create_vector(1.0f, 0, 0);
-    vec3 center;
-    float t;
+    vec3 unit_dir, first, second, center;
 
-    set_elems(&center, 0, 0, -1.0f);
-    
-    if (hit_sphere(&center, 0.5f, r)) { return red; }
+    set_elems(&first, 1.0f, 1.0f, 1.0f);
+    set_elems(&second, 0.5f, 0.7f, 1.0f);
+    set_elems(&center, 0, 0, -1);
 
-    unit_direction = unit_vector(direction(r));
-    t = 0.5f * (y(unit_direction) + 1.0f);
-    free(red);
-    free(unit_direction);
+    if (hit_sphere(&center, 0.5, r)) {
+        set_elems(vec, 1, 0, 0);
+        return;
+    } /* if */
 
-    pixel_color->e[0] = (1.0f - t) + t * 0.5f;
-    pixel_color->e[1] = (1.0f - t) + t * 0.7f;
-    pixel_color->e[2] = (1.0f - t) + t * 0.7f;
-    return pixel_color;
+    turn_into_unit_vector(&unit_dir, direction(r));
+
+    float t = 0.5f * (get_y(&unit_dir) + 1.0f);
+
+    multiply_scalar(&first, (1.0f - t));
+    multiply_scalar(&second, t);
+    add_vec(vec, &first, &second);
 }
 
 int
@@ -55,23 +66,25 @@ main(void)
 {
     int i, j;
     int ir, ig, ib;
-    int nx = 200, ny = 100;
+    int nx = 200;
+    int ny = 100;
     float u, v;
+    float x, y, z;
     FILE *output_file;
     char *filename = "ch4.ppm";
-    vec3 horizontal, vertical, lower_left_corner, origin, scr_coord;
-    set_elems(&horizontal, 4.0f, 0, 0);
-    set_elems(&vertical, 2.0f, 0, 0);
-    set_elems(&lower_left_corner, -2.0f, -1.0f, -1.0f);
-    set_elems(&origin, 0, 0, 0);
-    set_elems(&scr_coord, 0, 0, 0);
-    vec3 *col;
+    vec3 lower_left_corner, horizontal, vertical, origin;
+    vec3 scr_coord, pixel_color;
     ray r;
+
+    set_elems(&lower_left_corner, -2.0f, -1.0f, -1.0f);
+    set_elems(&horizontal, 4.0f, 0, 0);
+    set_elems(&vertical, 0, 2.0f, 0);
+    zero_out_vector(&origin);
 
     output_file = fopen(filename, "w");
 
     if (!output_file) {
-        fprintf(stderr, "Could not open %s. Aborting.\n", filename);
+        perror("Could not open ch4.ppm. Aborting.\n");
         exit(EXIT_FAILURE);
     } /* if */
 
@@ -81,27 +94,28 @@ main(void)
         for (i = 0; i < nx; i++) {
             u = (float)i / (float)nx;
             v = (float)j / (float)ny;
-            scr_coord.e[0] = lower_left_corner.e[0]
-                           + u * horizontal.e[0] + v * vertical.e[0];
-            scr_coord.e[1] = lower_left_corner.e[1]
-                           + u * horizontal.e[1] + v * vertical.e[1];
-            scr_coord.e[2] = lower_left_corner.e[2]
-                           + u * horizontal.e[2] + v * vertical.e[2];
+            x = get_x(&lower_left_corner) + u * get_x(&horizontal)
+                + v * get_x(&vertical);
+            y = get_y(&lower_left_corner) + u * get_y(&horizontal)
+                + v * get_y(&vertical);
+            z = get_z(&lower_left_corner) + u * get_z(&horizontal)
+                + v * get_z(&vertical);
 
-            r.A = &origin;
-            r.B = &scr_coord;
-            col = color(&r);
+            set_elems(&scr_coord, x, y, z);
 
-            ir = (int)(255.99 * col->e[0]);
-            ig = (int)(255.99 * col->e[1]);
-            ib = (int)(255.99 * col->e[2]);
+            set_ray_vectors(&r, &origin, &scr_coord);
+            color(&r, &pixel_color);
+
+            ir = (int)(255.99 * get_x(&pixel_color));
+            ig = (int)(255.99 * get_y(&pixel_color));
+            ib = (int)(255.99 * get_z(&pixel_color));
 
             fprintf(output_file, "%d %d %d\n", ir, ig, ib);
-            delete_vector(col);
         } /* for */
     } /* for */
 
     fclose(output_file);
+
     return 0;
 }
 /* EOF */
