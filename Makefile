@@ -31,5 +31,11 @@ ch4: src/ch4.c src/ray.c src/vec3.c
 run_ch4:
 	bin/ch4
 
+ch5: src/ch5.c src/ray.c src/vec3.c
+	$(CC) $^ $(CFLAGS) -lm -o bin/$@
+
+run_ch5:
+	bin/ch5
+
 move_render:
 	mv *.ppm renders/
